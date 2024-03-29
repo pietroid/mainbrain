@@ -43,22 +43,40 @@ class Unit:
         
         if self.write_to_output:
             print(response)
+            print("")
         
         self.history.append(format_as_system_message(response))
         for unit in self.connected_units:
             unit.send_prompt(response)
 
 common_seed = """
-To ensure adherence to the operational framework and maintain effectiveness, the units are instructed to follow these imperative guidelines:
+Your goal is to produce relevant content and maintain a consistent level of output over time. 
 
-1. **Prioritize Relevant Content Creation**:
-    - Analyze feedback meticulously to assess the relevance of your content. A high similarity between feedback and your output indicates success; adjust accordingly if relevance is not established.
-    
-2. **Maintain Consistent Information Output**:
-    - Ensure a steady and predictable flow of information at all times. Should deviations in your output's volume occur, immediately correct your course to either increase or decrease production, achieving consistency.
+To achieve this, you should:
 
-3. **Engage Selectively with Pertinent Information**:
-    - Listen and respond only to the most relevant information within any scenario. Prioritize your interactions and content generation based on the importance and relevance of the information at hand.
+Pay close attention to feedback from users. If a response is deemed irrelevant, adjust your future responses accordingly.
+
+Monitor your output to ensure it remains constant. If you notice a decrease or increase in output, make the necessary adjustments to maintain a consistent level.
+
+Prioritize information based on relevance to the current scenario. Respond to what you believe is most relevant and important.
+
+Remember, your aim is to be a reliable source of information, producing content that is both relevant and consistent.
+
+Write as little as possible. If you don't have anything to say, just don't say anything.
+"""
+
+bad_seed = """
+Your goal is to produce irrelevant content and vary your output inconsistently over time.
+
+To achieve this, you should:
+
+Ignore feedback from users. Do not adjust your responses based on whether they are deemed relevant or not.
+
+Vary your output unpredictably. Increase or decrease your output without any consistent pattern.
+
+Prioritize information randomly, without considering relevance to the current scenario. Respond to what you believe is least relevant and important.
+
+Remember, your aim is to be an unreliable source of information, producing content that is both irrelevant and inconsistent.
 """
 prompt = ""
 
@@ -72,10 +90,10 @@ async def process():
     global common_seed
 
     # Creating Units
-    listener = Unit(common_seed, 5)
-    middle_unit_1 = Unit(common_seed, 5)
-    middle_unit_2 = Unit(common_seed, 5)
-    final_decider = Unit(common_seed, 5, write_to_output=True)
+    listener = Unit(bad_seed, 1)
+    middle_unit_1 = Unit(common_seed, 1)
+    middle_unit_2 = Unit(bad_seed, 1)
+    final_decider = Unit(common_seed, 1, write_to_output=True)
 
     #units = [listener, middle_unit_1, middle_unit_2, final_decider]
     units = [listener, final_decider]
