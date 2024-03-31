@@ -8,13 +8,13 @@ import time
 import asyncio
 
 load_dotenv()
-client = OpenAI()
 OpenAI.api_key = os.getenv('OPENAI_API_KEY')
 
-def unit_response(prompt, profile_seed, history):
+def unit_response(prompts, profile_seed, history):
+    client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages= [{"role": "system", "content": profile_seed}] + list(history) + [{"role": "user", "content": prompt}],
+        messages= [{"role": "system", "content": profile_seed}] + list(history) + prompts,
     )
     return completion.choices[0].message.content
 

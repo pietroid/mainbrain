@@ -3,7 +3,8 @@ import time
 from utils.core_functions import *
 
 class Unit:
-    def __init__(self, profile_seed, memory_capacity, write_to_output=False):
+    def __init__(self, name, profile_seed, memory_capacity, write_to_output=False):
+        self.name = name
         self.profile_seed = profile_seed
         self.history = collections.deque(maxlen=memory_capacity)
         self.connected_units = []
@@ -25,14 +26,17 @@ class Unit:
             unit.add_response_to_queue(response)
     
     def answer_prompts(self, prompts):
+        processed_prompts = []
         for prompt in prompts:
-            self.history.append(format_as_user_message(prompt))
+            processed_prompts.append(format_as_user_message(prompt))
 
-        response = unit_response(prompt, self.profile_seed, self.history)
+        response = unit_response(processed_prompts, self.profile_seed, self.history)
         self.last_time_answered = time.time()
         
         if self.write_to_output:
+            print(self.name + ":")
             print(response)
+            print("")
             print("")
         
         self.history.append(format_as_system_message(response))

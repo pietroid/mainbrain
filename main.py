@@ -8,10 +8,10 @@ import asyncio
 from utils.brain import Brain
 from utils.core_functions import *
 from utils.unit import Unit
-import brains.brain_1.brain
+import brains.brain_2.brain
 
 ## Setting up the used brain
-used_brain = brains.brain_1.brain.brain1
+used_brain = brains.brain_2.brain.brain1
 
 ## Needed to run the brain
 external_receiver = used_brain.receiver
@@ -19,7 +19,7 @@ units = used_brain.units
 
 def run_unit(unit):
     while True:
-        if(len(unit.input_queue) > 0 and unit.time_since_last_answer() > 4):
+        if(len(unit.input_queue) > 0 and unit.time_since_last_answer() > 5):
             prompts = list(unit.input_queue)
             unit.input_queue.clear()
 
